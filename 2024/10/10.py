@@ -34,6 +34,6 @@ for i in range(len(grid)):
     for j in range(len(grid[0])):
         if grid[i][j] == 0:
             ans1 += sol.part_one(copy.deepcopy(grid), (i, j), 1)
-            ans2 += sol.part_one(copy.deepcopy(grid), (i,j), 2)
+            ans2 += sol.part_one(copy.deepcopy(grid), (i, j), 2)
 print("PART ONE:", ans1)
 print("PART TWO:", ans2)
