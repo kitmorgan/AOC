@@ -82,26 +82,37 @@ class Solution:
                     l = a_times + 1
                 else:
                     r = a_times - 1
-
-    def part_one(self):
-        # binary search? 0 -> max(prize/push)
-        self.guess = []
+    def cramer(self, prize, a, b):
+        det = a[0] * b[1] - a[1] * b[0]
+        aP = (prize[0] * b[1] - prize[1] * b[0]) / det
+        bP = (a[0] * prize[1] - a[1] * prize[0]) / det
+        print(aP, bP)
+        if aP % 1 == 0.0 and bP % 1 == 0.0:
+            return aP * 3 + bP
+        return 0
+    def part_two(self):
+        ans = 0
         for i, puzzle in enumerate(self.puzzles):
             prize, a, b = puzzle
-            ans = self.search(prize, a, b)
-            print(prize)
-            if ans:
-                self.guess.append(ans)
-                print(ans)
-        # guess - 23832, 24136, 23832 -- too low 
-        # when both buttons are the same?
-        # when a button changes by 0?
+            prize = list(prize)
+            prize[0] += 10000000000000
+            prize[1] += 10000000000000
+            ans += self.cramer(prize, a, b)
+        print('Two', ans)
         
-        print(sum(self.guess))
+    def part_one(self):
+        # binary search? 0 -> max(prize/push)
+        ans = 0
+        for i, puzzle in enumerate(self.puzzles):
+            prize, a, b = puzzle
+            ans += self.cramer(prize, a, b)
+            
+        
+        print(ans)
 
 
 # find min A, B such that ax * A  + bx * B = target_x and ay * A + by * B = target_y
 #
 s = Solution('./13.txt')
-print(s.puzzles)
-print("Part one: ", s.part_one())
+#print("Part one: ", s.part_one())
+s.part_two()
