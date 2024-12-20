@@ -4,7 +4,7 @@ class Solution:
         self.grid = []
         with open(file_path,'r') as f:
             self.start = None
-            self.directions = None
+            self.directions = []
 
             section = 1
             
@@ -20,7 +20,7 @@ class Solution:
                         except:
                             continue
                 else:
-                    self.directions = list(l.strip())
+                    self.directions += list(l.strip())
                 
         self.grid = self.grid[1:len(self.grid)-1]
         self.M = len(self.grid)
@@ -31,7 +31,9 @@ class Solution:
         return 100 * pos[0] + pos[1]
     
     def inbounds(self, pos):
-        return 0 >= pos[0] < self.M and 0 <= pos[1] <= self.N
+        if pos == (0,6):
+            pass
+        return 0 <= pos[0] < self.M and 0 <= pos[1] < self.N
             
     def can_move(self, pos, dir):
         next = (pos[0] + dir[0], pos[1] + dir[1])
@@ -62,15 +64,22 @@ class Solution:
         if end[1] < start[1]:
             jnc = -1
         
-
+    
+        # self.print_grid()
+        # print('-----')
         for i in range(start[0], end[0] + inc, -1 if end[0] < start[0] else 1): #0 - 0 # 3-0
             tmp = self.grid[i][start[1]]
             self.grid[i][start[1]] = prev
             prev = tmp
+            # self.print_grid()
+            # print('-----')
         for j in range(start[1], end[1] + jnc, -1 if end[1] < start[1] else 1): # 1-3
             tmp = self.grid[start[0]][j]
             self.grid[start[0]][j] = prev 
             prev = tmp
+            # self.print_grid()
+
+            print('-----')
     
     def part_one(self):
         robot = self.start
@@ -80,12 +89,16 @@ class Solution:
             moving = True
             curr = robot # 1,1 > 1,2
             end = self.can_move(curr,dir)
-            print(curr,end, inst)
-            if end:
+            if end != False:
                 self.move(curr,end)
-                self.print_grid()
-                print('-----')
                 robot = (robot[0] + di, robot[1] + dj)
+        ans = 0
+        for i in range(self.M):
+            for j in range(self.N):
+                if self.grid[i][j] == 'O':
+                    ans += self.get_gps((i+1,j+1))
+        self.print_grid()
+        print('one_ans', ans)
                     
 s = Solution('./15.txt')
 s.part_one()
